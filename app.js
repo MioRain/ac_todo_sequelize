@@ -2,6 +2,10 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
+const db = require('./models')
+const Todo = db.Todo
+const User = db.User
+
 const app = express()
 const PORT = 3000
 
@@ -25,6 +29,12 @@ app.post('/users/login', (req, res) => {
 
 app.get('/users/register', (req, res) => {
   res.render('register')
+})
+
+app.post('/users/register', (req, res) => {
+  const { name, email, password, confirmPassword } = req.body
+  User.create({ name, email, password })
+    .then(user => res.redirect('/'))
 })
 
 app.post('/users/register', (req, res) => {
